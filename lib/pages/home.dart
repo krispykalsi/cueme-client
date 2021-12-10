@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:alan_voice/alan_voice.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey[200],
         appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -106,8 +108,8 @@ class _HomeState extends State<Home> {
                     child: ToggleButtons(
                       children: [
                         Icon(Icons.message),
-                        Icon(Icons.call),
-                        Icon(Icons.cake),
+                        Icon(FontAwesomeIcons.whatsapp),
+                        Icon(Icons.mail),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -125,10 +127,6 @@ class _HomeState extends State<Home> {
                     )),
                 ElevatedButton(
                   onPressed: () {
-                    print(subject.text);
-                    print(contact.text);
-                    print(message.text);
-                    print(email.text);
                     String data = '{"email":"' +
                         email.text +
                         '","message":"' +
@@ -204,29 +202,17 @@ class _HomeState extends State<Home> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('A Failed Cue.Try Again :(');
+      Fluttertoast.showToast(
+        msg: "'A Failed Cue.Try Again :(",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        // backgroundColor: Colors.red,
+        // textColor: Colors.white,
+        // fontSize: 16.0
+      );
+      throw Exception('A Failed Cue.Try Again :( \nreason: ' +
+          (response.reasonPhrase ?? "Unknown"));
     }
   }
-  // Future<http.Response> callAPI() async {
-  //   String url = 'http://localhost:8080/api';
-  //   final response = await http.get(Uri.parse('http://localhost:8080/api/sms'));
-
-  //   if (response.statusCode == 200) {
-  //     Fluttertoast.showToast(
-  //       msg: "Your Cue Was Succesfull :)",
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       // backgroundColor: Colors.red,
-  //       // textColor: Colors.white,
-  //       // fontSize: 16.0
-  //     );
-  //     return response;
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     throw Exception('A Failed Cue.Try Again :(');
-  //   }
-  // }
-
 }
