@@ -96,6 +96,16 @@ class _HomeState extends State<Home> {
                   ],
                 ),  
               ), 
+               Padding(
+                    padding: EdgeInsets.all(15),
+                    child: ToggleButtons(
+                      children: [
+                        Icon(Icons.message),
+                        Icon(Icons.call),
+                        Icon(Icons.cake),
+                      ],
+                   
+                    )),
               ElevatedButton(
                 onPressed: (){
                     print(subject.text);
