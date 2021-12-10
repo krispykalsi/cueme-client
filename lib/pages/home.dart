@@ -10,6 +10,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late DateTime pickedDate;
   late TimeOfDay time;
+  List<bool> _selection = List.generate(3, (_) => false);
   @override
   void initState() {
     super.initState();
@@ -95,6 +96,28 @@ class _HomeState extends State<Home> {
                   ],
                 ),  
               ), 
+                Padding(
+                    padding: EdgeInsets.all(15),
+                    child: ToggleButtons(
+                      children: [
+                        Icon(Icons.message),
+                        Icon(Icons.call),
+                        Icon(Icons.cake),
+                      ],
+                      onPressed: (int index) {
+                        int count = 0;
+                        _selection.forEach((bool val) {
+                          if (val) count++;
+                        });
+                        if (_selection[index] && count < 2) {
+                          return;
+                        }
+                        setState(() {
+                          _selection[index] = !_selection[index];
+                        });
+                      },
+                      isSelected: _selection,
+                    )),
               ElevatedButton(
                 onPressed: (){
                     print(subject.text);

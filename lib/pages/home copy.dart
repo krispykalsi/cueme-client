@@ -11,7 +11,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late DateTime pickedDate;
   late TimeOfDay time;
-   List<bool> _selection = List.generate(3, (_) => false);
+  List<bool> _selection = List.generate(3, (_) => false);
   @override
   void initState() {
     super.initState();
