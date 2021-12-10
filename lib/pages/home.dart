@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -102,8 +103,8 @@ class _HomeState extends State<Home> {
                     child: ToggleButtons(
                       children: [
                         Icon(Icons.message),
-                        Icon(Icons.call),
-                        Icon(Icons.cake),
+                        Icon(FontAwesomeIcons.whatsapp),
+                        Icon(Icons.mail),
                       ],
                       onPressed: (int index) {
                         int count = 0;
@@ -124,7 +125,11 @@ class _HomeState extends State<Home> {
                     print(subject.text);
                     print(contact.text);
                     print(message.text);
-                    
+                    print(time);
+                    print(pickedDate);
+                    print(_selection[0]);
+                    print(_selection[1]);
+                    print(_selection[2]);
                   },
                 child: const Text('Cue'),
               ), 
