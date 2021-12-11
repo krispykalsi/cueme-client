@@ -18,23 +18,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   dynamic tempemail;
   dynamic tempenumber;
   dynamic tempemsg;
   dynamic tempdate;
   dynamic temptime;
-  dynamic isemail;
-  dynamic ismsg;
-  dynamic iswtsp;
-  
+  dynamic isemail = false;
+  dynamic ismsg = false;
+  dynamic iswtsp = false;
 
   _HomePageState() {
-  /// Init Alan Button with project key from Alan Studio      
-    AlanVoice.addButton("eaca2cbbc44dfb01c1386ac5152de8472e956eca572e1d8b807a3e2338fdd0dc/stage");
+    /// Init Alan Button with project key from Alan Studio
+    AlanVoice.addButton(
+        "eaca2cbbc44dfb01c1386ac5152de8472e956eca572e1d8b807a3e2338fdd0dc/stage");
 
     /// Handle commands from Alan Studio
-    AlanVoice.callbacks.add((command)=>_handleCommands(command.data));
+    AlanVoice.callbacks.add((command) => _handleCommands(command.data));
   }
 
   final api = const CuemeApi();
@@ -71,36 +70,51 @@ class _HomePageState extends State<HomePage> {
     handleResponse(successStatus);
   }
 
-  _handleCommands(Map <String, dynamic> response){
-    if(response["command"]=="email"){
+  _handleCommands(Map<String, dynamic> response) {
+    if (response["command"] == "email") {
       tempemail = response["data"];
     }
-    if(response["command"]=="phone"){
-      tempenumber=response["data"];
+    if (response["command"] == "phone") {
+      tempenumber = response["data"];
     }
-    if(response["command"]=="msg"){
-      tempemsg=response["data"];
+    if (response["command"] == "msg") {
+      tempemsg = response["data"];
     }
-    if(response["command"]=="emailfinal"){
-      isemail="yes";
+    if (response["command"] == "emailfinal") {
+      isemail = true;
     }
-    if(response["command"]=="wtspyes"){
-      iswtsp="yes";
+    if (response["command"] == "wtspyes") {
+      iswtsp = true;
     }
-    if(response["command"]=="smsyes"){
-      ismsg="yes";
+    if (response["command"] == "smsyes") {
+      ismsg = true;
     }
-    if(response["command"]=="date"){
+    if (response["command"] == "date") {
       tempdate = response["data"];
     }
-    if(response["command"]=="time"){
+    if (response["command"] == "time") {
       temptime = response["data"];
     }
-    if(response["command"]=="finalCue"){
-      // call api.
+    if (response["command"] == "finalCue") {
+      apiCallViaAlan();
     }
-    print(response);
+  }
+
+  void apiCallViaAlan() {
+    var date = DateTime.now();
+    var time = TimeOfDay.now();
+    var mediumSelectionState = <Mediums, bool>{};
+    mediumSelectionState[Mediums.wa] = iswtsp;
+    mediumSelectionState[Mediums.email] = isemail;
+    mediumSelectionState[Mediums.sms] = ismsg;
+
+    final mediums = mediumSelectionState.entries
+        .where((isSelected) => isSelected.value)
+        .map<Mediums>((isSelected) => isSelected.key)
+        .toSet();
+
+    final req = CuemeRequest(tempemsg, date, time,
+        mediums: mediums, phone: "+91" + tempenumber, email: tempemail);
+    _onCue(req);
   }
 }
-
-
