@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:cueme/pages/home.dart';
-import 'package:cueme/pages/loading_screen.dart';
+import 'package:cueme/pages/home/home_page.dart';
+import 'package:cueme/pages/loading/loading_page.dart';
 
-
-void main()=>runApp(MaterialApp(
-  initialRoute: '/',
-  routes: {
-    '/home': (context)=>Home(),
-    '/': (context)=>Loading(),
-  },
-));
-
+void main() {
+  runApp(
+    MaterialApp(
+      initialRoute: '/',
+      routes: {
+        '/home': (context) => const HomePage(),
+        '/': (context) => const LoadingPage(),
+      },
+    ),
+  );
+}
