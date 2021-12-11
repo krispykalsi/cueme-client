@@ -23,10 +23,18 @@ class CuemeRequest {
         assert(mediums.isNotEmpty);
 
   String toJson() {
+    final rfc3339Time = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    ).toUtc().toIso8601String();
     final jsonMap = <String, dynamic>{
       "message": message,
       "email": email ?? "",
       "phone": phone ?? "",
+      "time": rfc3339Time,
     };
     return jsonEncode(jsonMap);
   }
