@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:alan_voice/alan_voice.dart';
+//import 'package:alan_voice/alan_voice.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -167,16 +167,16 @@ class _HomeState extends State<Home> {
       });
   }
 
-  _HomeState() {
-    /// Init Alan Button with project key from Alan Studio
-    AlanVoice.addButton(
-        "6ca645cf90c533067cb872151c493bf52e956eca572e1d8b807a3e2338fdd0dc/stage");
+  // _HomeState() {
+  //   /// Init Alan Button with project key from Alan Studio
+  //   AlanVoice.addButton(
+  //       "6ca645cf90c533067cb872151c493bf52e956eca572e1d8b807a3e2338fdd0dc/stage");
 
-    /// Handle commands from Alan Studio
-    AlanVoice.onCommand.add((command) {
-      debugPrint("got new command ${command.toString()}");
-    });
-  }
+  //   /// Handle commands from Alan Studio
+  //   AlanVoice.onCommand.add((command) {
+  //     debugPrint("got new command ${command.toString()}");
+  //   });
+  // }
 
   Future<void> callAPI(String data) async {
     print(data);
