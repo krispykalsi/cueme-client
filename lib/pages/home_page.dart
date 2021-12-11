@@ -1,10 +1,12 @@
 import 'package:cueme/api/cueme_api.dart';
 import 'package:cueme/models/cueme_request.dart';
-import 'package:cueme/pages/home/request_form.dart';
+import 'package:cueme/models/mediums.dart';
+import 'package:cueme/widgets/handle_response.dart';
+import 'package:cueme/widgets/show_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:alan_voice/alan_voice.dart';
-import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
+
+import 'src/home/request_form.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -40,16 +42,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text('Cueme'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: RequestForm(onCue: _onCue),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: RequestForm(onCue: _onCue),
+        ),
       ),
     );
   }
@@ -66,33 +69,5 @@ class _HomePageState extends State<HomePage> {
     );
     Navigator.pop(context);
     handleResponse(successStatus);
-  }
-
-  void handleResponse(http.Response response) {
-    if (response.statusCode == 200) {
-      Fluttertoast.showToast(
-        msg: "Your Cue Was Successful :)",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        // backgroundColor: Colors.red,
-        // textColor: Colors.white,
-        // fontSize: 16.0
-      );
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      Fluttertoast.showToast(
-        msg: "'A Failed Cue.Try Again :(",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        // backgroundColor: Colors.red,
-        // textColor: Colors.white,
-        // fontSize: 16.0
-      );
-      throw Exception('A Failed Cue.Try Again :( \nreason: ' +
-          (response.reasonPhrase ?? "Unknown"));
-    }
   }
 }
