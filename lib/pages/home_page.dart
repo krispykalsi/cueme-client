@@ -22,9 +22,12 @@ class _HomePageState extends State<HomePage> {
   dynamic tempemail;
   dynamic tempenumber;
   dynamic tempemsg;
+  dynamic tempdate;
+  dynamic temptime;
   dynamic isemail;
   dynamic ismsg;
   dynamic iswtsp;
+  
 
   _HomePageState() {
   /// Init Alan Button with project key from Alan Studio      
@@ -86,6 +89,15 @@ class _HomePageState extends State<HomePage> {
     }
     if(response["command"]=="smsyes"){
       ismsg="yes";
+    }
+    if(response["command"]=="date"){
+      tempdate = response["data"];
+    }
+    if(response["command"]=="time"){
+      temptime = response["data"];
+    }
+    if(response["command"]=="finalCue"){
+      // call api.
     }
     print(response);
   }
