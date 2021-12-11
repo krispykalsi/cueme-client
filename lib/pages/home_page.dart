@@ -54,8 +54,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _onCue(CuemeRequest req) {
-    api.request(req).forEach(handleResponse);
+  void _onCue(CuemeRequest req) async {
+    final successStatus = {for (var medium in Mediums.values) medium: true};
+    showLoadingIndicator(context);
+    await api.request(req).forEach(
+      (tuple) {
+        final medium = tuple.item1;
+        final response = tuple.item2;
+        successStatus[medium] = response.statusCode == 200;
+      },
+    );
+    Navigator.pop(context);
+    handleResponse(successStatus);
   }
 
   void handleResponse(http.Response response) {
