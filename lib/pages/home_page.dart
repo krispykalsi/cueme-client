@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cueme/api/cueme_api.dart';
 import 'package:cueme/models/cueme_request.dart';
 import 'package:cueme/models/mediums.dart';
@@ -16,28 +18,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
+  dynamic tempemail;
+  dynamic tempenumber;
+  dynamic tempemsg;
+  dynamic isemail;
+  dynamic ismsg;
+  dynamic iswtsp;
+
   _HomePageState() {
-    AlanVoice.addButton(
-        "6ca645cf90c533067cb872151c493bf52e956eca572e1d8b807a3e2338fdd0dc/stage");
+  /// Init Alan Button with project key from Alan Studio      
+    AlanVoice.addButton("eaca2cbbc44dfb01c1386ac5152de8472e956eca572e1d8b807a3e2338fdd0dc/stage");
+
+    /// Handle commands from Alan Studio
+    AlanVoice.callbacks.add((command)=>_handleCommands(command.data));
   }
 
   final api = const CuemeApi();
-
-  @override
-  void initState() {
-    super.initState();
-    AlanVoice.onCommand.add(_alanCallback);
-  }
-
-  @override
-  void dispose() {
-    AlanVoice.onCommand.remove(_alanCallback);
-    super.dispose();
-  }
-
-  void _alanCallback(command) {
-    debugPrint("got new command ${command.toString()}");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,4 +67,28 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
     handleResponse(successStatus);
   }
+
+  _handleCommands(Map <String, dynamic> response){
+    if(response["command"]=="email"){
+      tempemail = response["data"];
+    }
+    if(response["command"]=="phone"){
+      tempenumber=response["data"];
+    }
+    if(response["command"]=="msg"){
+      tempemsg=response["data"];
+    }
+    if(response["command"]=="emailfinal"){
+      isemail="yes";
+    }
+    if(response["command"]=="wtspyes"){
+      iswtsp="yes";
+    }
+    if(response["command"]=="smsyes"){
+      ismsg="yes";
+    }
+    print(response);
+  }
 }
+
+
