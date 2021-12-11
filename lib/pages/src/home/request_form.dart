@@ -38,6 +38,9 @@ class _RequestFormState extends State<RequestForm> {
     final req = CuemeRequest(msg, date, time,
         mediums: mediums, phone: phone, email: email);
     widget.onCue(req);
+    phoneController.clear();
+    messageController.clear();
+    emailController.clear();
   }
 
   @override
