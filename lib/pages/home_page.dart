@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:cueme/api/cueme_api.dart';
 import 'package:cueme/models/cueme_request.dart';
 import 'package:cueme/models/mediums.dart';
+import 'package:cueme/pages/src/home/alan_boi.dart';
 import 'package:cueme/widgets/handle_response.dart';
 import 'package:cueme/widgets/show_loading_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:alan_voice/alan_voice.dart';
 
 import 'src/home/request_form.dart';
 
@@ -18,24 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  dynamic tempemail;
-  dynamic tempenumber;
-  dynamic tempemsg;
-  dynamic tempdate;
-  dynamic temptime;
-  dynamic isemail = false;
-  dynamic ismsg = false;
-  dynamic iswtsp = false;
-
-  _HomePageState() {
-    /// Init Alan Button with project key from Alan Studio
-    AlanVoice.addButton(
-        "eaca2cbbc44dfb01c1386ac5152de8472e956eca572e1d8b807a3e2338fdd0dc/stage");
-
-    /// Handle commands from Alan Studio
-    AlanVoice.callbacks.add((command) => _handleCommands(command.data));
-  }
-
   final api = const CuemeApi();
 
   @override
@@ -50,7 +30,10 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 15),
-          child: RequestForm(onCue: _onCue),
+          child: AlanBoi(
+            child: RequestForm(onCue: _onCue),
+            onCue: _onCue,
+          ),
         ),
       ),
     );
@@ -68,53 +51,5 @@ class _HomePageState extends State<HomePage> {
     );
     Navigator.pop(context);
     handleResponse(successStatus);
-  }
-
-  _handleCommands(Map<String, dynamic> response) {
-    if (response["command"] == "email") {
-      tempemail = response["data"];
-    }
-    if (response["command"] == "phone") {
-      tempenumber = response["data"];
-    }
-    if (response["command"] == "msg") {
-      tempemsg = response["data"];
-    }
-    if (response["command"] == "emailfinal") {
-      isemail = true;
-    }
-    if (response["command"] == "wtspyes") {
-      iswtsp = true;
-    }
-    if (response["command"] == "smsyes") {
-      ismsg = true;
-    }
-    if (response["command"] == "date") {
-      tempdate = response["data"];
-    }
-    if (response["command"] == "time") {
-      temptime = response["data"];
-    }
-    if (response["command"] == "finalCue") {
-      apiCallViaAlan();
-    }
-  }
-
-  void apiCallViaAlan() {
-    var date = DateTime.now();
-    var time = TimeOfDay.now();
-    var mediumSelectionState = <Mediums, bool>{};
-    mediumSelectionState[Mediums.wa] = iswtsp;
-    mediumSelectionState[Mediums.email] = isemail;
-    mediumSelectionState[Mediums.sms] = ismsg;
-
-    final mediums = mediumSelectionState.entries
-        .where((isSelected) => isSelected.value)
-        .map<Mediums>((isSelected) => isSelected.key)
-        .toSet();
-
-    final req = CuemeRequest(tempemsg, date, time,
-        mediums: mediums, phone: "+91" + tempenumber, email: tempemail);
-    _onCue(req);
   }
 }
