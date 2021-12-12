@@ -25,9 +25,13 @@ class _AlanBoiState extends State<AlanBoi> {
   dynamic sendWhatsapp = false;
 
   _AlanBoiState() {
-    AlanVoice.addButton(
-        "eaca2cbbc44dfb01c1386ac5152de8472e956eca572e1d8b807a3e2338fdd0dc/stage");
-    AlanVoice.callbacks.add((command) => _handleCommands(command.data));
+    const authKey = bool.hasEnvironment("ALAN_SDK_AUTH_KEY")
+        ? String.fromEnvironment("ALAN_SDK_AUTH_KEY")
+        : null;
+    if (authKey != null) {
+      AlanVoice.addButton(authKey);
+      AlanVoice.callbacks.add((command) => _handleCommands(command.data));
+    }
   }
 
   @override
