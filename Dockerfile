@@ -23,8 +23,13 @@ RUN flutter config --enable-web
 
 # Copy files to container and build
 RUN mkdir /app
-COPY . /app
 WORKDIR /app
+
+COPY pubspec.yaml /app
+COPY pubspec.lock /app
+RUN flutter pub get
+
+COPY . /app
 RUN flutter build web
 
 # Record the exposed port
@@ -33,4 +38,4 @@ EXPOSE 5000
 # make server startup script executable and start the web server
 RUN ["chmod", "+x", "/app/server.sh"]
 
-CMD [ "/app/server.sh"]
+CMD ["./app/server.sh"]

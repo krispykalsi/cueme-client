@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cueme-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cueme-web
+  template:
+    metadata:
+      labels:
+        app: cueme-web
+    spec:
+      containers:
+        - image: krispykalsi/cueme-web:1.0
+          name: cueme-web
+          env:
+            - name: ALAN_SDK_AUTH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: keys-bf6d2kcttg
+                  key: ALAN_SDK_AUTH_KEY
