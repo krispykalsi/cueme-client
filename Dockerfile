@@ -1,41 +1,26 @@
-# Install Operating system and dependencies
-FROM ubuntu:20.04
+# Specify the Dart SDK base image version using dart:<version> (ex: dart:2.12)
+FROM dart:stable AS build
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update
-RUN apt-get install -y curl git wget unzip libgconf-2-4 gdb libstdc++6 libglu1-mesa fonts-droid-fallback lib32stdc++6 python3
-RUN apt-get clean
-
-# download Flutter SDK from Flutter Github repo
-RUN git clone https://github.com/flutter/flutter.git /usr/local/flutter
-
-# Set flutter environment path
-ENV PATH="/usr/local/flutter/bin:/usr/local/flutter/bin/cache/dart-sdk/bin:${PATH}"
-
-# Run flutter doctor
-RUN flutter doctor
-
-# Enable flutter web
-RUN flutter channel master
-RUN flutter upgrade
-RUN flutter config --enable-web
-
-# Copy files to container and build
-RUN mkdir /app
+# Resolve app dependencies.
 WORKDIR /app
+COPY server/pubspec.* .
+RUN dart pub get
 
-COPY pubspec.yaml /app
-COPY pubspec.lock /app
-RUN flutter pub get
+# Copy app source code and AOT compile it.
+RUN mkdir public
+COPY build/web/. public
+COPY server/. /app
+# Ensure packages are still up-to-date if anything has changed
+RUN dart pub get --offline
+RUN dart compile exe server.dart -o server
 
-COPY . /app
-RUN flutter build web
+# Build minimal serving image from AOT-compiled `/server` and required system
+# libraries and configuration files stored in `/runtime/` from the build stage.
+FROM scratch
+COPY --from=build /runtime/ /
+COPY --from=build /app/server /app/
+COPY --from=build /app/public/ /public
 
-# Record the exposed port
+# Start server.
 EXPOSE 5000
-
-# make server startup script executable and start the web server
-RUN ["chmod", "+x", "/app/server.sh"]
-
-ENTRYPOINT ["sh", "/app/server.sh"]
+CMD ["/app/server"]

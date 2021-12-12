@@ -13,7 +13,7 @@ spec:
         app: cueme-web
     spec:
       containers:
-        - image: krispykalsi/cueme-web:1.0
+        - image: krispykalsi/cueme-web:1.1
           name: cueme-web
           env:
             - name: ALAN_SDK_AUTH_KEY

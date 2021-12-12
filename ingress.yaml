@@ -7,14 +7,8 @@ metadata:
     app: cueme-web
   name: cueme-web-ingress
 spec:
-  rules:
-    - host: cueme.xyz
-      http:
-        paths:
-          - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: cueme-web
-                port:
-                  number: 5000
+  defaultBackend:
+    service:
+      name: cueme-web
+      port:
+        number: 5000
