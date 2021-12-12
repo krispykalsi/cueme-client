@@ -1,0 +1,17 @@
+# Miscellaneous
+.idea/
+
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.packages
+build/
+
+# Android related
+**/android/**/gradle-wrapper.jar
+**/android/gradlew
+**/android/gradlew.bat
+**/android/local.properties
+# iOS/XCode related
+
+**/ios/Runner/GeneratedPluginRegistrant.*

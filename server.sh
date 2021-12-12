@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Set the port
 PORT=5000
