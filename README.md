@@ -1,16 +1,47 @@
-# cueme
+# Welcome to Cueme
+![](https://i.imgur.com/gUw7ANz.jpg)
 
-A new Flutter project.
+Cueme is a unified messaging application that lets you mail, message, WhatsApp, contacts, everything on the same platform. It makes life easy, right? Wait, it's not all our app is being integrated with Alan voice SDK means you do not need to type at all; say Hello! to our app and go for it. On over that, it's not just an android app; our users have total liberty to use our android or web application.
 
-## Getting Started
+## Inspiration
 
-This project is a starting point for a Flutter application.
+This is for the lazy people, who are not able to keep up with their existing reminders and would like personal attention from their friends and family or even, themselves. Although we have got our good ol'reminders, the impact of a personal message makes a difference. Having to be reminded on our daily-use social media platforms, in our opinion, would be a safer bet than our usual reminder apps. For instance, we are likely to pay more attention to a Whatsapp (or your choice of social-app) message than a reminder that we snoozed ten times already.
 
-A few resources to get you started if this is your first Flutter project:
+## What it does
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Sends a message to your desired contact via (currently) three platforms - WhatsApp, SMS, Email. Can be scheduled for later too). This sounds simple but, imagine what it could do as a full-blown API. 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+# Demo!
+![](https://i.imgur.com/haximPI.gif) 
+
+## Instructions
+
+Cueme's interface is straightforward. You will be providing Email, Contact, and body(message), and if required to send a post message, you will be specifying the date and time. That's all; select your mode from SMS, Whatsapp, Email and hit Cue. A popup will acknowledge you, and you are all done.
+
+## How to install
+1. Install your flutter from https://docs.flutter.dev/get-started/install .
+2. Get your Alan auth. Key from https://alan.app/ and save it in a file named ".env.secret" in your root folder after downloading the cueme client.
+3. Run the main.dart file.
+
+## How to use Alan
+
+Alan offers SDKs to embed a voice assistant to our app.
+1. Just press the alan button at the bottom and say "send a message/whatsapp/email to [Contact info] on [date] at [time]" 
+2. Alan will as for the message and any missing information he failed to catch.
+3. Provide him with the required information and he'll cue the message sucessfully
+
+## Tech Stack 
+### FLutter
+- Used for creating the application's interface
+### Alan Sdk
+- It offers SDK to Embed a voice assistant to our app. We create the script which the app follows in order to accept voice commands from user.
+### Golang
+- Golang is very useful for writing light-weight microservices. We currently use it for generating APIs that interact with our front-end applications. 
+### Twilio
+- The Twilio REST API allows you to query and manage meta-data about your account, phone numbers, usage, and access tokens. Learn the basics of working with Twilio’s APIs. In our application we used it's whatsapp,message and email apis to perform the tasks.
+### Kubernetes
+- Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
+### Docker
+- Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
+
