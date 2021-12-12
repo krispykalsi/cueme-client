@@ -1,0 +1,145 @@
+const command = "command"
+const data = "data"
+
+const msgCmd = "msg"
+const phoneCmd = "phone"
+const emailCmd = "email"
+const dateCmd = "date"
+const timeCmd = "time"
+
+const whatsappFlagCmd = "whatsappFlag";
+const emailFlagCmd = "emailFlag";
+const messageFlagCmd = "messageFlag";
+
+const cueCmd = "cue";
+
+let singleMediumAndContact = [
+    '(send|) (a|an) $(choice message|sms|whatsapp|email|mail) (message|) (to|at) $(contact* (.+)) (on|at|) $(TIME) $(DATE)',
+    '(send|) (a|an) $(choice message|sms|whatsapp|email|mail) (message|) (to|at) $(contact* (.+)) (on|at|) $(DATE) $(TIME)',
+    '(send|) (a|an) $(choice message|sms|whatsapp|email|mail) (message|) (to|at) $(contact* (.+)) (on|at|) $(DATE)',
+    '(send|) (a|an) $(choice message|sms|whatsapp|email|mail) (message|) (to|at) $(contact* (.+)) (on|at|) $(TIME)',
+    '(send|) (a|an) $(choice message|sms|whatsapp|email|mail) (message|) (to|at) $(contact* (.+))'
+];
+
+intent(singleMediumAndContact, p => {
+    p.play('alright, what\'s your message?');
+    switch (p.choice.value) {
+        case 'whatsapp':
+            p.play({command: whatsappFlagCmd, data: true});
+            p.play({command: phoneCmd, data: p.contact.value});
+            break;
+        case 'message|sms': 
+            p.play({command: messageFlagCmd, data: true});
+            p.play({command: phoneCmd, data: p.contact.value});
+            break;
+        case 'email|mail': 
+            p.play({command: emailFlagCmd, data: true});
+            p.play({command: emailCmd, data: p.contact.value});
+            break;
+    }
+    if (p.DATE != null) {
+        p.play({command: dateCmd, data: p.DATE.moment});
+        if (p.TIME.value != '') {
+            p.play({command: timeCmd, data: p.TIME.time});
+            p.then(onlyMsg);
+        } else {
+            p.then(timeMsg);
+        }
+    } else if (p.TIME != null) {
+        p.play({command: timeCmd, data: p.TIME.time});
+        p.then(onlyMsg);
+    } else {
+        p.then(msgDateTime);
+    }
+});
+
+let multipleMediumAndContact = [
+    '(send|) (a|an) $(choice1 message|sms|whatsapp) (message|) (and|) $(choice2 message|sms|whatsapp|) (message|) (to|at) $(NUMBER)',
+    '(send|) (a|an) $(choice3 email|mail) (to|at) $(email* (.+)) (and|) $(choice1 message|sms|whatsapp) (message|) (to|at) $(NUMBER)',
+    '(send|) (a|an) $(choice1 message|sms|whatsapp) (message|) (and|) $(choice2 message|sms|whatsapp|) (message|) (to|at) $(NUMBER) (and|) $(choice3 email|mail) (to|at) $(email* (.+))',
+    '(send|) (a|an) $(choice3 email|mail) (to|at) $(email* (.+)) (and|) $(choice1 message|sms|whatsapp) (message|) (and|) $(choice2 message|sms|whatsapp|) (message|) (to|at) $(NUMBER)'
+];
+
+intent(multipleMediumAndContact, p => {
+    p.play('alright, what\'s your message?');
+    if (p.choice1 != null) {
+        switch (p.choice1.value) {
+            case 'whatsapp':
+                p.play({command: whatsappFlagCmd, data: true});
+                break;
+            case 'message|sms': 
+                p.play({command: messageFlagCmd, data: true});
+                break;
+        }
+        p.play({command: phoneCmd, data: p.NUMBER.value});
+    }
+    if (p.choice2 != null) {
+        switch (p.choice2.value) {
+            case 'whatsapp':
+                p.play({command: whatsappFlagCmd, data: true});
+                break;
+            case 'message|sms': 
+                p.play({command: messageFlagCmd, data: true});
+                break;
+        }
+        p.play({command: phoneCmd, data: p.NUMBER.value});
+    }
+    if (p.choice3 != null) {
+        p.play({command: emailFlagCmd, data: true});
+        p.play({command: emailCmd, data: p.email.value});
+    }
+    p.then(msgDateTime);
+});
+
+let msgDateTime = context(() => {
+    intent('$(msg* (.+))', p => {
+        p.play({command: msgCmd, data: p.msg.value});
+        p.play('(Okay.|Cool.|) when do you want to send this?');
+        p.then(dateTime);
+        p.resolve();
+    });
+});
+
+let dateTime = context(() => {
+    let combinations = [
+        '$(DATE) $(TIME)',
+        '$(TIME) $(DATE)',
+        '$(TIME)',
+        '$(DATE)'
+    ]
+    intent(combinations, p => {
+        if (p.DATE != null) {
+            p.play({command: dateCmd, data: p.DATE.moment});
+            if (p.TIME != null) {
+                p.play({command: timeCmd, data: p.TIME.time});
+                p.play('Cueing...');
+                p.play({command: cueCmd});
+            } else {
+                p.play('(Okay.|Cool.|) what time?');
+            }
+        } else if (p.TIME != null) {
+            p.play({command: timeCmd, data: p.TIME.time});
+            p.play('Cueing...');
+            p.play({command: cueCmd});
+        } else {
+            p.play('(Sorry, couldn\'t catch you|Umm try again.) (when do you want to send this?|)');
+        }
+    });
+});
+
+let timeMsg = context(() => {
+    intent('$(TIME)', p => {
+        p.play({command: timeCmd, data: p.TIME.time});
+        p.play('What do you wanna say?');
+        p.then(onlyMsg);
+    });
+});
+
+let onlyMsg = context(() => {
+    intent('$(msg* (.+))', p => {
+        p.play({command: msgCmd, data: p.msg.value});
+        p.play('Cueing...');
+        p.play({command: cueCmd});
+        p.resolve();
+    });
+});
