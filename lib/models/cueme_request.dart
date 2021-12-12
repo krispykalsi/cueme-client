@@ -23,6 +23,7 @@ class CuemeRequest {
         assert(mediums.isNotEmpty);
 
   String toJson() {
+    final phoneWithCountryCode = phone == null ? "" : "+91" + phone!;
     final rfc3339Time = DateTime(
       date.year,
       date.month,
@@ -33,7 +34,7 @@ class CuemeRequest {
     final jsonMap = <String, dynamic>{
       "message": message,
       "email": email ?? "",
-      "phone": phone ?? "",
+      "phone": phoneWithCountryCode,
       "time": rfc3339Time,
     };
     return jsonEncode(jsonMap);
