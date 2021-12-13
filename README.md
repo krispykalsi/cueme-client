@@ -11,7 +11,6 @@ This is for the lazy people, who are not able to keep up with their existing rem
 
 Sends a message to your desired contact via (currently) three platforms - WhatsApp, SMS, Email. Can be scheduled for later too). This sounds simple but, imagine what it could do as a full-blown API. 
 
-
 # Demo!
 ![](https://i.imgur.com/haximPI.gif) 
 
@@ -20,28 +19,17 @@ Sends a message to your desired contact via (currently) three platforms - WhatsA
 Cueme's interface is straightforward. You will be providing Email, Contact, and body(message), and if required to send a post message, you will be specifying the date and time. That's all; select your mode from SMS, Whatsapp, Email and hit Cue. A popup will acknowledge you, and you are all done.
 
 ## How to install
-1. Install your flutter from https://docs.flutter.dev/get-started/install .
-2. Get your Alan auth. Key from https://alan.app/ and save it in a file named ".env.secret" in your root folder after downloading the cueme client.
-3. Run the main.dart file.
+1. Install your flutter from https://docs.flutter.dev/get-started/install.
+2. Get your Alan auth. Key from https://alan.app/ and save it in a file named ".env.secret" in the project folder.
+3. Run in shell.
+```shell
+flutter pub get
+flutter run main.dart
+```
 
 ## How to use Alan
 
 Alan offers SDKs to embed a voice assistant to our app.
 1. Just press the alan button at the bottom and say "send a message/whatsapp/email to [Contact info] on [date] at [time]" 
 2. Alan will as for the message and any missing information he failed to catch.
-3. Provide him with the required information and he'll cue the message sucessfully
-
-## Tech Stack 
-### FLutter
-- Used for creating the application's interface
-### Alan Sdk
-- It offers SDK to Embed a voice assistant to our app. We create the script which the app follows in order to accept voice commands from user.
-### Golang
-- Golang is very useful for writing light-weight microservices. We currently use it for generating APIs that interact with our front-end applications. 
-### Twilio
-- The Twilio REST API allows you to query and manage meta-data about your account, phone numbers, usage, and access tokens. Learn the basics of working with Twilio’s APIs. In our application we used it's whatsapp,message and email apis to perform the tasks.
-### Kubernetes
-- Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
-### Docker
-- Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
-
+3. Provide him with the required information and he'll cue the message successfully
